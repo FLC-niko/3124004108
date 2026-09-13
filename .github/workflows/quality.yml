@@ -1,0 +1,23 @@
+name: Java quality and tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Run tests
+        working-directory: 3124004108
+        run: bash scripts/test.sh
+      - name: Run quality check
+        working-directory: 3124004108
+        run: bash scripts/quality-check.sh
