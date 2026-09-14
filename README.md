@@ -13,7 +13,8 @@ java -jar main.jar <原文绝对路径> <抄袭版绝对路径> <答案绝对路
 例如：
 
 ```bash
-java -jar main.jar /tmp/orig.txt /tmp/orig_add.txt /tmp/answer.txt
+java -jar main.jar "$(pwd)/examples/orig.txt" \
+  "$(pwd)/examples/orig_0.8_add.txt" /tmp/answer.txt
 ```
 
 答案文件只写入一个保留两位小数的浮点数，范围为 `0.00` 到 `1.00`。
@@ -30,6 +31,8 @@ bash scripts/quality-check.sh
 ```
 
 测试脚本包含 15 个测试用例，覆盖完全相同、完全不同、空文件、增删改、重复词、中英文混合、标点差异、非法参数和文件异常等情况。
+
+仓库中的 `examples/` 还保留了论文查重样例集：`orig.txt`、`orig_0.8_add.txt`、`orig_0.8_del.txt` 以及三个 `orig_0.8_dis_*` 文件。它们可以直接作为命令行测试输入，答案文件建议写到 `/tmp` 等临时目录。
 
 ## 算法说明
 
@@ -49,6 +52,7 @@ similarity = dot(original, copy)
 ├── main.jar
 ├── src/main/java/       # 主程序
 ├── src/test/java/       # 依赖无关的单元测试
+├── examples/            # 论文查重样例测试集
 ├── scripts/             # 构建、测试和质量检查脚本
 ├── performance/         # 性能测试程序及截图说明
 └── docs/                # PSP 和过程记录
