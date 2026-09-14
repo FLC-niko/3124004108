@@ -1,8 +1,8 @@
 # 性能分析记录
 
-`PerformanceBenchmark.java` 会在内存中重复计算一组较长的中英文文本，用于观察查重计算的热点函数。它不是评测入口，不会被 `main.jar` 打包。
+`PerformanceBenchmark.java` 只用于性能采样，不会被打进提交的 `main.jar`。它在内存中重复计算两段较长的中英文文本，便于观察查重计算中的热点方法。
 
-运行示例：
+运行基准程序：
 
 ```bash
 cd 3124004108
@@ -13,22 +13,16 @@ javac -encoding UTF-8 -d build/performance-classes \
 java -cp build/classes:build/performance-classes PerformanceBenchmark 30
 ```
 
-最后一个参数是迭代次数，省略时默认为 30。使用 VisualVM 进行采样时可以临时使用较大的次数，让进程保持足够长的时间：
+最后一个参数是迭代次数。采样时使用了 IntelliJ IDEA 自带的 async-profiler，以 CPU 事件记录 `PerformanceBenchmark 3000` 的调用栈，实际运行结果为 `elapsed_ms=22270.44`。报告页面由 profiler 自动生成，再截取为下面的图片。
 
-```bash
-java -cp build/classes:build/performance-classes PerformanceBenchmark 3000
-```
+![async-profiler CPU 性能分析](performance-profile.png)
 
-## 本次记录
+在 profiler 页面放大业务方法后，`SimilarityCalculator.calculate` 显示为 `2,201 samples, 96.32%`，`SimilarityCalculator.frequency` 显示为 `523 samples, 22.89%`。从图中的业务方法调用链可以直接看到：
 
-本次使用 JDK Flight Recorder 记录了 `PerformanceBenchmark 30000` 的运行过程，再用 VisualVM 打开 `build/plagiarism-profile.jfr` 查看。截图中的运行环境为 OpenJDK 17，主类是 `PerformanceBenchmark`。
+- `SimilarityCalculator.calculate` 负责组织一次完整的相似度计算；
+- `TextTokenizer.tokenize` 是占用宽度较大的业务方法，主要开销来自逐字符扫描和 token 创建；
+- `SimilarityCalculator.frequency` 出现在词频统计调用路径中，使用哈希表统计 token 次数。
 
-从 JFR 的 `jdk.ExecutionSample` 样本看，采样主要落在以下调用路径：
+这也和代码的设计相符：文本先被扫描和分词，再统计词频，最后计算余弦相似度。当前实现已经让分词过程对字符只扫描一次，点积阶段只遍历一侧词频表并查询另一侧哈希表，避免了对全部 token 做双重遍历。
 
-- `TextTokenizer.tokenize`：遍历字符、识别中文字符和英文/数字 token；
-- `SimilarityCalculator.frequency`：使用 `HashMap` 统计 token 出现次数；
-- `SimilarityCalculator.calculate`：组织两段文本的 token 化和频率统计。
-
-![VisualVM JFR 性能分析](performance-profile.png)
-
-这张图是实际运行后从 VisualVM 窗口截取的记录，不是手工绘制的示意图。博客中可以直接引用这张图片，并结合上面的调用路径说明性能观察结果。
+这张图是真实运行 async-profiler 后生成的 CPU flame graph，方法名来自实际采样栈，不是手工绘制的数据图。博客中可结合图片说明热点方法和对应的优化思路。
