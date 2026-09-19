@@ -12,6 +12,7 @@ javac -encoding UTF-8 -Xlint:all -Werror \
   "$project_dir"/src/main/java/*.java
 
 jar --create --file "$project_dir/Myapp.jar" \
+  --date=2026-09-16T00:00:00Z \
   --main-class Main \
   -C "$build_dir/classes" .
 

@@ -21,3 +21,9 @@ jobs:
       - name: Run quality check
         working-directory: 3124004108
         run: bash scripts/quality-check.sh
+      - name: Test pair arithmetic project
+        working-directory: pair-arithmetic
+        run: bash scripts/quality-check.sh
+      - name: Run ten-thousand exercise stress test
+        working-directory: pair-arithmetic
+        run: bash scripts/stress-test.sh
