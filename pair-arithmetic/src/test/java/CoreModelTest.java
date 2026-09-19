@@ -20,12 +20,14 @@ public final class CoreModelTest {
         Expression first = binary(number(2), Operator.ADD, number(3));
         Expression second = binary(number(3), Operator.ADD, number(2));
         TestSupport.assertEquals(first.canonicalKey(), second.canonicalKey());
+        TestSupport.assertEquals(first.equivalenceKey(), second.equivalenceKey());
     }
 
     public void nonCommutativeChildrenKeepOrder() {
         Expression first = binary(number(3), Operator.SUBTRACT, number(2));
         Expression second = binary(number(2), Operator.SUBTRACT, number(3));
         TestSupport.assertTrue(!first.canonicalKey().equals(second.canonicalKey()), "减法不应该交换左右两边");
+        TestSupport.assertTrue(!first.equivalenceKey().equals(second.equivalenceKey()), "结构键也不能交换减法");
     }
 
     public void nestedCommutativeExampleIsDetected() {

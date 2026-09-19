@@ -6,9 +6,9 @@ import java.util.SplittableRandom;
 public final class ExpressionGeneratorTest {
     public void generatedExpressionsAreUnique() {
         List<Expression> expressions = generator().generate(500, 10);
-        Set<String> keys = new HashSet<>();
+        Set<ExpressionKey> keys = new HashSet<>();
         for (Expression expression : expressions) {
-            TestSupport.assertTrue(keys.add(expression.canonicalKey()), "发现重复表达式");
+            TestSupport.assertTrue(keys.add(expression.equivalenceKey()), "发现重复表达式");
         }
     }
 

@@ -1,0 +1,8 @@
+[0.230s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
+[0.230s][info][jfr,startup] 
+[0.230s][info][jfr,startup] Use jcmd 11460 JFR.dump name=1 to copy recording data to file.
+题目数量：10000，数值范围：10，测量轮数：60
+总耗时：0.992 秒
+平均每次生成：16.528 毫秒
+平均生成速度：605036 题/秒
+校验值：602213

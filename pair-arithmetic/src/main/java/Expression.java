@@ -5,6 +5,8 @@ public interface Expression {
 
     int precedence();
 
+    ExpressionKey equivalenceKey();
+
     String canonicalKey();
 
     String format();

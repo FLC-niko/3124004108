@@ -3,4 +3,5 @@ Exercises.txt
 Answers.txt
 Grade.txt
 *.class
+performance/*.jfr
 .DS_Store

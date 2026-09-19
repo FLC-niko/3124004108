@@ -27,13 +27,13 @@ public final class ExpressionGenerator {
         }
 
         List<Expression> result = new ArrayList<>(count);
-        Set<String> keys = new HashSet<>(Math.max(16, count * 2));
+        Set<ExpressionKey> keys = new HashSet<>(Math.max(16, count * 2));
         long maximumAttempts = Math.max(20_000L, count * 2_000L);
 
         for (long attempts = 0; result.size() < count && attempts < maximumAttempts; attempts++) {
             int operatorCount = 1 + random.nextInt(3);
             Expression candidate = buildExpression(operatorCount, range);
-            if (candidate != null && keys.add(candidate.canonicalKey())) {
+            if (candidate != null && keys.add(candidate.equivalenceKey())) {
                 result.add(candidate);
             }
         }

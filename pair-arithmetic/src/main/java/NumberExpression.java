@@ -2,9 +2,11 @@ import java.util.Objects;
 
 public final class NumberExpression implements Expression {
     private final Rational value;
+    private final ExpressionKey equivalenceKey;
 
     public NumberExpression(Rational value) {
         this.value = Objects.requireNonNull(value, "value");
+        this.equivalenceKey = ExpressionKey.number(value);
     }
 
     @Override
@@ -20,6 +22,11 @@ public final class NumberExpression implements Expression {
     @Override
     public int precedence() {
         return 3;
+    }
+
+    @Override
+    public ExpressionKey equivalenceKey() {
+        return equivalenceKey;
     }
 
     @Override

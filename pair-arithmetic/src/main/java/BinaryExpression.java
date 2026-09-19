@@ -5,12 +5,14 @@ public final class BinaryExpression implements Expression {
     private final Operator operator;
     private final Expression right;
     private final Rational value;
+    private final ExpressionKey equivalenceKey;
 
     public BinaryExpression(Expression left, Operator operator, Expression right) {
         this.left = Objects.requireNonNull(left, "left");
         this.operator = Objects.requireNonNull(operator, "operator");
         this.right = Objects.requireNonNull(right, "right");
         this.value = calculate(left.value(), operator, right.value());
+        this.equivalenceKey = ExpressionKey.binary(operator, left.equivalenceKey(), right.equivalenceKey());
     }
 
     private static Rational calculate(Rational left, Operator operator, Rational right) {
@@ -47,6 +49,11 @@ public final class BinaryExpression implements Expression {
     @Override
     public int precedence() {
         return operator.precedence();
+    }
+
+    @Override
+    public ExpressionKey equivalenceKey() {
+        return equivalenceKey;
     }
 
     @Override
