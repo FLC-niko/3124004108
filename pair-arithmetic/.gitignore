@@ -1,0 +1,6 @@
+build/
+Exercises.txt
+Answers.txt
+Grade.txt
+*.class
+.DS_Store
