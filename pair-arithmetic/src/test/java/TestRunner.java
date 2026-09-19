@@ -10,7 +10,11 @@ public final class TestRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        List<Class<?>> testClasses = List.of(CoreModelTest.class, ExpressionGeneratorTest.class);
+        List<Class<?>> testClasses = List.of(
+                CoreModelTest.class,
+                ExpressionGeneratorTest.class,
+                ParserAndGraderTest.class,
+                MainTest.class);
         int passed = 0;
         List<String> failures = new ArrayList<>();
 

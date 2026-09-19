@@ -83,7 +83,7 @@ public final class Rational implements Comparable<Rational> {
         if (mixedMark >= 0) {
             BigInteger whole = new BigInteger(value.substring(0, mixedMark));
             Rational fraction = parse(value.substring(mixedMark + 1));
-            Rational magnitude = of(whole.abs().longValueExact()).add(fraction);
+            Rational magnitude = new Rational(whole.abs(), BigInteger.ONE).add(fraction);
             return whole.signum() < 0 ? ZERO.subtract(magnitude) : magnitude;
         }
         int slash = value.indexOf('/');
